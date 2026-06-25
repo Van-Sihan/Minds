@@ -406,9 +406,11 @@ with tab2:
     from matplotlib.colors import LinearSegmentedColormap
     coral_cmap = LinearSegmentedColormap.from_list("coral_scale", ["#FBEAE8", CORAL])
     styled_table = (
-        merged.sort_values("인구10만명당기관수", ascending=True)
+        merged.drop(columns=["NAME_1"])  # 변경: 지도 매칭용 컬럼이라 표에는 불필요 -> 제거
+        .sort_values("인구10만명당기관수", ascending=True)
         .style.background_gradient(subset=["인구10만명당기관수"], cmap=coral_cmap.reversed())
         .format({"인구10만명당기관수": "{:.2f}", "인구수": "{:,.0f}"})
+        .hide(axis="index")  # 변경: 인덱스 숫자 컬럼 숨김
     )
     st.dataframe(styled_table, use_container_width=True)
 
